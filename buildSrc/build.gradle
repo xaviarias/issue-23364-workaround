@@ -1,0 +1,10 @@
+tasks.withType(Wrapper).configureEach {
+    println "Executing buildSrc"
+    def jvmOpts = "-Dfile.encoding=UTF-8"
+    it.inputs.property("jvmOpts", jvmOpts)
+    doLast {
+        def optsEnvVar = "DEFAULT_JVM_OPTS"
+        it.scriptFile << it.scriptFile.text.replace("$optsEnvVar='", "$optsEnvVar='$jvmOpts ")
+        it.batchScript << it.batchScript.text.replace("set $optsEnvVar=", "set $optsEnvVar=$jvmOpts ")
+    }
+}
